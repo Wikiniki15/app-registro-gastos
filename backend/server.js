@@ -10,7 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 // Importar rutas
-const authRoutes = require('./src/routes/authRoutes');  // ← AGREGAR
+const authRoutes = require('./src/routes/authRoutes');
+const transactionRoutes = require('./src/routes/transactionRoutes');
 
 // Ruta de prueba
 app.get('/', (req, res) => {
@@ -18,7 +19,8 @@ app.get('/', (req, res) => {
 });
 
 // Usar rutas de autenticación
-app.use('/api/auth', authRoutes);  // ← AGREGAR
+app.use('/api/auth', authRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 const PORT = process.env.PORT || 5000;
 
