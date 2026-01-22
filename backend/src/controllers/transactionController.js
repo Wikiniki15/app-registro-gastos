@@ -40,15 +40,48 @@ exports.create = (req, res) => {
   }
 };
 
-// Obtener todas las transacciones del usuario
+// Obtener todas las transacciones del usuario (con filtros opcionales)
 exports.getAll = (req, res) => {
   try {
     const userId = req.userId;
-    const transactions = TransactionModel.findByUserId(userId);
+    const { category, type, startDate, endDate } = req.query;
+
+    let query = 'SELECT * FROM transactions WHERE user_id = ?';
+    const params = [userId];
+
+    // Filtro por categoría
+    if (category) {
+      query += ' AND category = ?';
+      params.push(category);
+    }
+
+    // Filtro por tipo (income/expense)
+    if (type && (type === 'income' || type === 'expense')) {
+      query += ' AND type = ?';
+      params.push(type);
+    }
+
+    // Filtro por rango de fechas
+    if (startDate) {
+      query += ' AND date >= ?';
+      params.push(startDate);
+    }
+
+    if (endDate) {
+      query += ' AND date <= ?';
+      params.push(endDate);
+    }
+
+    query += ' ORDER BY date DESC, created_at DESC';
+
+    const db = require('../database');
+    const stmt = db.prepare(query);
+    const transactions = stmt.all(...params);
 
     res.json({
       transactions,
-      total: transactions.length
+      total: transactions.length,
+      filters: { category, type, startDate, endDate }
     });
 
   } catch (error) {
