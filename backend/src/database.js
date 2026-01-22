@@ -30,6 +30,43 @@ db.exec(`
   )
 `);
 
+// Crear tabla de categorías
+db.exec(`
+  CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    name TEXT NOT NULL,
+    is_default INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  )
+`);
+
+// Insertar categorías predefinidas (solo si no existen)
+const checkCategories = db.prepare('SELECT COUNT(*) as count FROM categories WHERE is_default = 1');
+const result = checkCategories.get();
+
+if (result.count === 0) {
+  const insertDefaultCategory = db.prepare(
+    'INSERT INTO categories (user_id, name, is_default) VALUES (NULL, ?, 1)'
+  );
+  
+  const defaultCategories = [
+    'Alimentación',
+    'Transporte',
+    'Entretenimiento',
+    'Salud',
+    'Educación',
+    'Otros'
+  ];
+  
+  defaultCategories.forEach(category => {
+    insertDefaultCategory.run(category);
+  });
+  
+  console.log('Categorías predefinidas creadas');
+}
+
 console.log('Base de datos inicializada correctamente');
 
 module.exports = db;

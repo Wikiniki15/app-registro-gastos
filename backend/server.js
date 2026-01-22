@@ -10,8 +10,10 @@ app.use(cors());
 app.use(express.json());
 
 // Importar rutas
+// Importar rutas
 const authRoutes = require('./src/routes/authRoutes');
 const transactionRoutes = require('./src/routes/transactionRoutes');
+const categoryRoutes = require('./src/routes/categoryRoutes');
 
 // Ruta de prueba
 app.get('/', (req, res) => {
@@ -21,6 +23,7 @@ app.get('/', (req, res) => {
 // Usar rutas de autenticación
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/categories', categoryRoutes);
 
 const PORT = process.env.PORT || 5000;
 
