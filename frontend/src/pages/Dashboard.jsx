@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import TransactionForm from '../components/TransactionForm';
 import TransactionList from '../components/TransactionList';
 import * as transactionService from '../services/transactionService';
+import TransactionFilters from '../components/TransactionFilters';
 
 function Dashboard() {
   const { user, logout } = useContext(AuthContext);
@@ -11,16 +12,17 @@ function Dashboard() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [filters, setFilters] = useState({});
 
   // Cargar transacciones al montar el componente
   useEffect(() => {
     loadTransactions();
   }, []);
 
-  const loadTransactions = async () => {
+  const loadTransactions = async (appliedFilters = {}) => {
     try {
       setLoading(true);
-      const data = await transactionService.getTransactions();
+      const data = await transactionService.getTransactions(appliedFilters);
       setTransactions(data.transactions);
       setError('');
     } catch (err) {
@@ -58,6 +60,11 @@ function Dashboard() {
     navigate('/login');
   };
 
+  const handleFilterChange = (newFilters) => {
+  setFilters(newFilters);
+  loadTransactions(newFilters);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <nav className="bg-white shadow-md p-4">
@@ -93,6 +100,8 @@ function Dashboard() {
         )}
 
         <TransactionForm onTransactionAdded={handleTransactionAdded} />
+
+        <TransactionFilters onFilterChange={handleFilterChange} />
 
         {loading ? (
           <div className="text-center py-8">

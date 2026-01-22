@@ -1,12 +1,12 @@
 function TransactionList({ transactions, onDelete }) {
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-EC', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+  const date = new Date(dateString + 'T00:00:00');
+  return date.toLocaleDateString('es-EC', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
 
   const formatAmount = (amount) => {
     return `$${parseFloat(amount).toFixed(2)}`;
