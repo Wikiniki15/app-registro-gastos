@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Categories from './pages/Categories';
 
 // Componente para proteger rutas
 function PrivateRoute({ children }) {
@@ -21,6 +22,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <Dashboard />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/categories"
+        element={
+          <PrivateRoute>
+            <Categories />
           </PrivateRoute>
         }
       />

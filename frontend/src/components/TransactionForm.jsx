@@ -1,20 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import * as categoryService from '../services/categoryService';
 
 function TransactionForm({ onTransactionAdded }) {
   const [type, setType] = useState('expense');
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('Alimentación');
+  const [category, setCategory] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [categories, setCategories] = useState([]);
 
-  const categories = [
-    'Alimentación',
-    'Transporte',
-    'Entretenimiento',
-    'Salud',
-    'Educación',
-    'Otros'
-  ];
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const loadCategories = async () => {
+    try {
+      const data = await categoryService.getCategories();
+      setCategories(data.categories);
+      if (data.categories.length > 0) {
+        setCategory(data.categories[0].name);
+      }
+    } catch (err) {
+      console.error('Error al cargar categorías:', err);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -100,7 +109,7 @@ function TransactionForm({ onTransactionAdded }) {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat.id} value={cat.name}>{cat.name}</option>
                 ))}
               </select>
             </div>

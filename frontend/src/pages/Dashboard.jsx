@@ -65,17 +65,23 @@ function Dashboard() {
           <h1 className="text-2xl font-bold text-gray-800">
             Control de Gastos
           </h1>
-          <div className="flex items-center gap-4">
-            <span className="text-gray-600">
-              Hola, {user?.name}
-            </span>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-            >
-              Cerrar Sesión
-            </button>
-          </div>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => navigate('/categories')}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+          >
+            Gestionar Categorías
+          </button>
+          <span className="text-gray-600">
+            Hola, {user?.name}
+          </span>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
         </div>
       </nav>
 
