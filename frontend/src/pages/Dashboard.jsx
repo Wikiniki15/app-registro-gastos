@@ -74,6 +74,12 @@ function Dashboard() {
           </h1>
         <div className="flex items-center gap-4">
           <button
+            onClick={() => navigate('/statistics')}
+            className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700"
+          >
+            Ver Estadísticas
+          </button>
+          <button
             onClick={() => navigate('/categories')}
             className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
           >

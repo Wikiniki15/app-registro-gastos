@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Categories from './pages/Categories';
+import Statistics from './pages/Statistics';
 
 // Componente para proteger rutas
 function PrivateRoute({ children }) {
@@ -30,6 +31,14 @@ function AppRoutes() {
         element={
           <PrivateRoute>
             <Categories />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/statistics"
+        element={
+          <PrivateRoute>
+            <Statistics />
           </PrivateRoute>
         }
       />

@@ -38,3 +38,23 @@ export const deleteTransaction = async (id) => {
   const response = await axios.delete(`${API_URL}/${id}`, getAuthHeaders());
   return response.data;
 };
+
+// Exportar transacciones a CSV
+export const exportToCSV = async () => {
+  const token = getToken();
+  const response = await axios.get(`${API_URL}/export`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    responseType: 'blob' // Importante para archivos
+  });
+  
+  // Crear enlace de descarga
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `transacciones_${new Date().toISOString().split('T')[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
