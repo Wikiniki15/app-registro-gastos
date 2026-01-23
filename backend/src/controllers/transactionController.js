@@ -116,3 +116,32 @@ exports.delete = (req, res) => {
     res.status(500).json({ error: 'Error al eliminar transacción' });
   }
 };
+
+// Exportar transacciones a CSV
+exports.exportCSV = (req, res) => {
+  try {
+    const userId = req.userId;
+    const transactions = TransactionModel.findByUserId(userId);
+
+    // Crear CSV
+    let csv = 'Fecha,Tipo,Categoría,Descripción,Monto\n';
+    
+    transactions.forEach(transaction => {
+      const type = transaction.type === 'income' ? 'Ingreso' : 'Gasto';
+      const category = transaction.category || 'N/A';
+      const description = transaction.description.replace(/,/g, ';'); // Reemplazar comas
+      
+      csv += `${transaction.date},${type},${category},${description},${transaction.amount}\n`;
+    });
+
+    // Configurar headers para descarga
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename=transacciones_${new Date().toISOString().split('T')[0]}.csv`);
+    
+    res.send(csv);
+
+  } catch (error) {
+    console.error('Error al exportar CSV:', error);
+    res.status(500).json({ error: 'Error al exportar CSV' });
+  }
+};

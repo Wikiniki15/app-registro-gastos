@@ -15,4 +15,7 @@ router.get('/', transactionController.getAll);
 // Eliminar transacción
 router.delete('/:id', transactionController.delete);
 
+// Exportar transacciones a CSV
+router.get('/export', transactionController.exportCSV);
+
 module.exports = router;
